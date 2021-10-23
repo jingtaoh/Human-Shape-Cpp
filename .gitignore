@@ -30,3 +30,17 @@
 *.exe
 *.out
 *.app
+
+# Hidden files
+*.DS_Store
+
+# Extra directories
+/.vscode
+/.vs
+/.idea
+/.clangd
+/3rdparty
+/cmake-build-*
+/build*
+/_build
+/data
