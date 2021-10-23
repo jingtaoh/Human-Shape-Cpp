@@ -44,3 +44,7 @@
 /build*
 /_build
 /data
+
+# Documentation
+*/html
+*/latex
