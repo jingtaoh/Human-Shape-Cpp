@@ -11,4 +11,7 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 # spdlog
 add_subdirectory(external/spdlog)
 
+# matio
+add_subdirectory(external/matio)
+
 add_subdirectory(src)

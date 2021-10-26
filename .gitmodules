@@ -4,3 +4,6 @@
 [submodule "external/spdlog"]
 	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "external/matio"]
+	path = external/matio
+	url = git://git.code.sf.net/p/matio/matio
