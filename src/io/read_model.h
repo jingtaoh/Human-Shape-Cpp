@@ -6,11 +6,13 @@
 #ifndef MOSHAPE_READ_MODEL_H
 #define MOSHAPE_READ_MODEL_H
 
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 #include "../core/Model.h"
 
 namespace fs = std::filesystem;
+
+namespace MoShape {
 
 /**
  * @file
@@ -83,5 +85,6 @@ Model read_model(fs::path path)
 
     return Model(mesh, skel);
 }
+} // namespace MoShape
 
 #endif // MOSHAPE_READ_MODEL_H

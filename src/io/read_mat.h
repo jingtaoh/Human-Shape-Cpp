@@ -11,11 +11,13 @@
 #include <filesystem>
 
 #include <matio.h>
-#include <Eigen/Dense>
 #include <spdlog/spdlog.h>
+#include <Eigen/Dense>
 
 using namespace Eigen;
 namespace fs = std::filesystem;
+
+namespace MoShape {
 
 /**
  * @file
@@ -64,5 +66,6 @@ MatrixXd read_mat(fs::path path, Vector2i dims)
 
     return res;
 }
+} // namespace MoShape
 
 #endif // MOSHAPE_READ_MAT_H

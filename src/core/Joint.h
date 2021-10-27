@@ -10,6 +10,7 @@
 
 using namespace Eigen;
 
+namespace MoShape {
 class Joint
 {
 public:
@@ -22,12 +23,25 @@ public:
     inline Vector3d get_moment() const { return m_moment; }
     inline int get_parent_id() const { return m_parent; }
 
+    inline void set_position(const Vector3d& pos)
+    {
+        m_pos = pos;
+        m_moment = pos.cross(m_dir);
+    }
+    inline void set_position_dir(const Vector3d& pos, const Vector3d& dir)
+    {
+        m_pos = pos;
+        m_dir = dir;
+        m_moment = pos.cross(dir);
+    }
+
 protected:
     Vector3d m_pos;
     Vector3d m_dir;
     Vector3d m_moment;
     int m_parent;
 };
+} // namespace MoShape
 
 
 #endif // MOSHAPE_JOINT_H

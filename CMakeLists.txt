@@ -15,3 +15,5 @@ add_subdirectory(external/spdlog)
 add_subdirectory(external/matio)
 
 add_subdirectory(src)
+
+file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

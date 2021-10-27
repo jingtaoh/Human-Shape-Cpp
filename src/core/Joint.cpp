@@ -5,6 +5,7 @@
 
 #include "Joint.h"
 
+namespace MoShape {
 Joint::Joint()
 {
     Vector3d zero(0, 0, 0);
@@ -21,3 +22,4 @@ Joint::Joint(const Vector3d& pos, const Vector3d& dir, int parent)
 {
     m_moment = pos.cross(dir);
 }
+} // namespace MoShape

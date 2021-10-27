@@ -4,6 +4,7 @@
 //
 
 #include "SkinnedVertex.h"
+namespace MoShape {
 
 SkinnedVertex::SkinnedVertex(
     const Vector3d& pos,
@@ -13,3 +14,5 @@ SkinnedVertex::SkinnedVertex(
     , m_joint_indices(joint_indices)
     , m_joint_weights(joint_weights)
 {}
+
+} // namespace MoShape
