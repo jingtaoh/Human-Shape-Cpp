@@ -14,6 +14,12 @@ add_subdirectory(external/spdlog)
 # matio
 add_subdirectory(external/matio)
 
+# glfw
+add_subdirectory(external/glfw)
+
+# gl3w
+add_subdirectory(external/gl3w)
+
 add_subdirectory(src)
 
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

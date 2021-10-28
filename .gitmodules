@@ -7,3 +7,9 @@
 [submodule "external/matio"]
 	path = external/matio
 	url = git://git.code.sf.net/p/matio/matio
+[submodule "external/gl3w"]
+	path = external/gl3w
+	url = https://github.com/adobe/lagrange-gl3w
+[submodule "external/glfw"]
+	path = external/glfw
+	url = https://github.com/glfw/glfw.git

@@ -5,6 +5,7 @@
 #include "core/Model.h"
 #include "io/read_mat.h"
 #include "io/read_model.h"
+#include "ui/Viewer.h"
 
 using namespace MoShape;
 
@@ -25,5 +26,8 @@ int main()
     model.change_shape_and_pose(shape, evectors, pose);
 
     spdlog::info("Hello, World!");
+
+    Viewer viewer("MoShape demo", 1024, 768);
+    viewer.run();
     return 0;
 }
