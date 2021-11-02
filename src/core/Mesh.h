@@ -42,6 +42,10 @@ public:
     {
         return m_vertices_mean_shape[vid].get_position();
     }
+    inline auto get_face_indices_by_id(int fid) const
+    {
+        return m_faces[fid];
+    }
     inline void set_vertex_pos_by_id(int vid, const Vector3d& pos)
     {
         m_vertices[vid].set_position(pos);

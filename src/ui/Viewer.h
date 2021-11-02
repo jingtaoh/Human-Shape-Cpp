@@ -9,6 +9,7 @@
 #include <string>
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
+#include "../core/Model.h"
 
 namespace MoShape {
 
@@ -46,6 +47,16 @@ public:
     ~Viewer();
 
     /**
+     * Start a new frame
+     */
+    void begin_frame();
+
+    /**
+     * End current frame and renders it
+     */
+    void end_frame();
+
+    /**
      * UI action wants the window to close
      *
      * @return window should close
@@ -57,6 +68,19 @@ public:
      */
     bool run();
 
+    /**
+     * Returns true if viewer initialized successfully
+     */
+     bool is_initialized() const;
+
+     GLFWwindow* get_window() const;
+
+     double get_window_ratio() const;
+
+     int get_window_height() const;
+
+     void detect_window_dimension_change();
+
 private:
     bool init_glfw(const WindowOptions& options);
 
@@ -67,6 +91,9 @@ private:
 
     int m_width;
     int m_height;
+
+    bool dimension_changed;
+
 };
 } // namespace MoShape
 

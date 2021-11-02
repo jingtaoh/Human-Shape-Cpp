@@ -5,6 +5,7 @@
 
 #include "Viewer.h"
 #include <spdlog/spdlog.h>
+#include "Color.h"
 
 namespace MoShape {
 Viewer::Viewer(const std::string& window_title, int window_width, int window_height)
@@ -27,25 +28,75 @@ Viewer::~Viewer()
     glfwTerminate();
 }
 
-bool Viewer::should_close() const {
+void Viewer::begin_frame()
+{
+    assert(m_window);
+    glfwMakeContextCurrent(m_window);
+    assert(m_window);
+
+    // Clear default frame buffer
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    detect_window_dimension_change();
+    Color bg_color = Color(0, 0, 0, 0);
+    glClearColor(bg_color.r(), bg_color.g(), bg_color.b(), bg_color.a());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Viewer::end_frame()
+{
+    // Swap Front and Back buffers (double buffering)
+    glfwSwapBuffers(m_window);
+
+    // Pool and process events
+    glfwPollEvents();
+}
+
+bool Viewer::should_close() const
+{
     return glfwWindowShouldClose(m_window);
 }
 
-bool Viewer::run() {
-    if (!m_initialized) return false;
+bool Viewer::run()
+{
+    if (!is_initialized()) return false;
 
-    while (!should_close())
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(m_window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+    while (!should_close()) {
+        begin_frame();
+        end_frame();
     }
     return true;
+}
+
+GLFWwindow* Viewer::get_window() const
+{
+    return m_window;
+}
+
+bool Viewer::is_initialized() const
+{
+    return m_initialized;
+}
+
+double Viewer::get_window_ratio() const
+{
+    return (double)m_width / (double)m_height;
+}
+
+int Viewer::get_window_height() const
+{
+    return m_height;
+}
+
+void Viewer::detect_window_dimension_change()
+{
+    int w, h;
+    glfwGetWindowSize(get_window(), &w, &h);
+    dimension_changed = (w != m_width || h != m_height);
+    if (dimension_changed) {
+        m_width = w;
+        m_height = h;
+        glViewport(0, 0, m_width, m_height);
+    }
 }
 
 bool Viewer::init_glfw(const WindowOptions& options)
@@ -70,13 +121,9 @@ bool Viewer::init_glfw(const WindowOptions& options)
         options.gl_version_minor,
         "#version 330");
 
-        // Create the window
-        m_window = glfwCreateWindow(
-            options.width,
-            options.height,
-            options.title.c_str(),
-            nullptr,
-            nullptr);
+    // Create the window
+    m_window =
+        glfwCreateWindow(options.width, options.height, options.title.c_str(), nullptr, nullptr);
 
     if (!m_window) {
         glfwTerminate();

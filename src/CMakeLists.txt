@@ -17,6 +17,14 @@ add_executable(MoShape
 
         core/convert_axis_angle_to_matrix.h core/convert_axis_angle_and_translation_to_matrix.h
 
-        ui/Viewer.cpp ui/Viewer.h)
+        ui/Viewer.cpp ui/Viewer.h
 
-target_link_libraries(MoShape PUBLIC Eigen3::Eigen spdlog matio gl3w glfw)
+        ui/Color.h
+
+        ui/Shader.cpp ui/Shader.h
+
+        ui/gl_check_error.h
+
+        ui/ModelRenderer.cpp ui/ModelRenderer.h)
+
+target_link_libraries(MoShape PUBLIC Eigen3::Eigen spdlog matio gl3w glfw glm)
