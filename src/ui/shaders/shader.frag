@@ -14,7 +14,7 @@ void main()
 {
     vec3 n = normalize(fs_in.normal);
 
-    vec3 light_pos = (view * vec4(0, 3, 0, 1)).xyz;
+    vec3 light_pos = (view * vec4(0, 50, 0, 1)).xyz;
     vec3 l = normalize(light_pos - fs_in.pos);
 
     vec3 r = -reflect(l, n);

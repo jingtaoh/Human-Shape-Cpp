@@ -11,10 +11,14 @@
 
 namespace MoShape {
 
+using AABB = Eigen::AlignedBox3d;
+
 class Model
 {
 public:
     Model(const Mesh& mesh, const Skeleton& skel);
+
+    void center_model();
 
     void change_shape_and_pose(
         const Shape& shape_vector,
@@ -36,6 +40,9 @@ protected:
     Shape m_shape_vector;
     Skeleton m_skeleton;
     Pose m_pose_vector;
+
+    AABB m_bound;
+    Vector3d m_center;
 
     MatrixXd m_skinning_weights;
 };

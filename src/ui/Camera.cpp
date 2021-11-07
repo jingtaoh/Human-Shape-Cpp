@@ -12,7 +12,7 @@ Camera::Camera()
     m_projection = glm::mat4(1.0f);
     m_view = glm::mat4(1.0f);
 
-    m_pos = glm::vec3(0, 0, -3);
+    m_pos = glm::vec3(0, 0, -180);
     m_up = glm::vec3(0, 1, 0);
     m_lookat = glm::vec3(0, 0, 0);
 
@@ -25,11 +25,11 @@ Camera Camera::default_camera(float width, float height)
 {
     Camera c;
     c.set_up(glm::vec3(0, 1, 0));
-    c.set_position(glm::vec3(0, 0, -3));
+    c.set_position(glm::vec3(0, 0, -180));
     c.set_lookat(glm::vec3(0, 0, 0));
     c.set_window_dimensions(width, height);
-    c.set_fov(glm::radians(45.0f));
-    c.set_planes(0.1f, 100.0f);
+    c.set_fov(glm::radians(60.0f));
+    c.set_planes(0.1f, 500.0f);
 
     return c;
 }

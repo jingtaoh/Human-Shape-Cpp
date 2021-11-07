@@ -30,46 +30,15 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     std::vector<Vector3f> old_vertices;
     std::vector<Vector3i> old_indices;
 
-    {
-        //    for (int i = 0; i < model.get_num_vertices(); i++) {
-        //        Vector3f vertex_pos =
-        //        model.get_mesh().get_mean_shape_vertex_pos_by_id(i).cast<float>();
-        //        old_vertices.emplace_back(vertex_pos);
-        //    }
-    }
-
-    {
-        old_vertices.emplace_back(-0.5, -0.5, -0.5);
-        old_vertices.emplace_back(0.5, -0.5, -0.5);
-        old_vertices.emplace_back(0.5, 0.5, -0.5);
-        old_vertices.emplace_back(-0.5, 0.5, -0.5);
-        old_vertices.emplace_back(-0.5, -0.5, 0.5);
-        old_vertices.emplace_back(0.5, -0.5, 0.5);
-        old_vertices.emplace_back(0.5, 0.5, 0.5);
-        old_vertices.emplace_back(-0.5, 0.5, 0.5);
+    for (int i = 0; i < model.get_num_vertices(); i++) {
+        Vector3f vertex_pos = model.get_mesh().get_vertex_pos_by_id(i).cast<float>();
+        old_vertices.emplace_back(vertex_pos);
     }
 
 
-    {
-        //    for (int i = 0; i < model.get_num_faces(); i++) {
-        //        Vector3i face_idx = model.get_mesh().get_face_indices_by_id(i);
-        //        old_indices.emplace_back(face_idx);
-        //    }
-    }
-
-    {
-        old_indices.emplace_back(0, 2, 1);
-        old_indices.emplace_back(0, 3, 2);
-        old_indices.emplace_back(4, 5, 6);
-        old_indices.emplace_back(4, 6, 7);
-        old_indices.emplace_back(1, 2, 6);
-        old_indices.emplace_back(1, 6, 5);
-        old_indices.emplace_back(3, 0, 7);
-        old_indices.emplace_back(7, 0, 4);
-        old_indices.emplace_back(2, 3, 7);
-        old_indices.emplace_back(2, 7, 6);
-        old_indices.emplace_back(0, 1, 4);
-        old_indices.emplace_back(4, 1, 5);
+    for (int i = 0; i < model.get_num_faces(); i++) {
+        Vector3i face_idx = model.get_mesh().get_face_indices_by_id(i);
+        old_indices.emplace_back(face_idx);
     }
 
     std::vector<Vector3f> new_vertices;
@@ -175,8 +144,8 @@ void Renderer::update_camera(GLFWwindow* window)
     m_camera.detect_window_dimension_change(window);
 
     auto model = glm::mat4(1.0f);
-    model =
-        glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
+    model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 
     auto view = m_camera.get_view();
     auto projection = m_camera.get_projection();

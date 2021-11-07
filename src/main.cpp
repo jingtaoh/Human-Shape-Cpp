@@ -16,6 +16,7 @@ int main()
 {
     // Read human shape model
     auto model = read_model(DATA_DIR "/model.dat");
+    model.center_model();
 
     // Read shape space eigenvectors
     Vector2i dims(20, 19347);

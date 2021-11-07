@@ -44,9 +44,9 @@ protected:
     glm::vec3 m_lookat;
 
     float m_aspect_ratio = 1.0f;
-    float m_fov = glm::radians(45.0f);
+    float m_fov = glm::radians(60.0f);
     float m_znear = 0.1f;
-    float m_zfar = 100.0f;
+    float m_zfar = 500.0f;
 
     int m_width;
     int m_height;
