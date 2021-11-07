@@ -36,7 +36,6 @@ void Viewer::begin_frame()
 
     // Clear default frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    detect_window_dimension_change();
     Color bg_color = Color(0, 0, 0, 0);
     glClearColor(bg_color.r(), bg_color.g(), bg_color.b(), bg_color.a());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -87,16 +86,9 @@ int Viewer::get_window_height() const
     return m_height;
 }
 
-void Viewer::detect_window_dimension_change()
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    int w, h;
-    glfwGetWindowSize(get_window(), &w, &h);
-    dimension_changed = (w != m_width || h != m_height);
-    if (dimension_changed) {
-        m_width = w;
-        m_height = h;
-        glViewport(0, 0, m_width, m_height);
-    }
+    glViewport(0, 0, width, height);
 }
 
 bool Viewer::init_glfw(const WindowOptions& options)
@@ -130,6 +122,8 @@ bool Viewer::init_glfw(const WindowOptions& options)
         spdlog::error("Failed to create window");
         return false;
     }
+
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
 
     // Make the window's context current
     glfwMakeContextCurrent(m_window);

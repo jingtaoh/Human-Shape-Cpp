@@ -5,8 +5,8 @@
 #include "core/Model.h"
 #include "io/read_mat.h"
 #include "io/read_model.h"
+#include "ui/Renderer.h"
 #include "ui/Viewer.h"
-#include "ui/ModelRenderer.h"
 
 #define DATA_DIR "../data/"
 
@@ -28,12 +28,17 @@ int main()
     // Change shape and pose
     model.change_shape_and_pose(shape, evectors, pose);
 
-    Viewer viewer("MoShape demo", 1024, 768);
+    float window_width = 1024;
+    float window_height = 768;
+
+    Viewer viewer("MoShape demo", window_width, window_height);
     // Must initialize after the viewer
-    ModelRenderer mr(model);
+    Camera camera = Camera::default_camera(window_width, window_height);
+    Renderer mr(model, camera);
 
     while (!viewer.should_close()) {
         viewer.begin_frame();
+        mr.update_camera(viewer.get_window());
         mr.render_model(true, true);
         viewer.end_frame();
     }

@@ -92,8 +92,6 @@ private:
     int m_width;
     int m_height;
 
-    bool dimension_changed;
-
 };
 } // namespace MoShape
 

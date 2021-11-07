@@ -8,6 +8,7 @@
 
 #include <GL/gl3w.h>
 #include <glm/glm.hpp>
+#include <Eigen/Dense>
 #include <initializer_list>
 #include <map>
 #include <string>
