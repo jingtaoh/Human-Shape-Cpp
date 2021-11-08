@@ -4,6 +4,9 @@
 //
 
 #include "Viewer.h"
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
 #include <spdlog/spdlog.h>
 #include "Color.h"
 
@@ -13,8 +16,11 @@ Viewer::Viewer(const std::string& window_title, int window_width, int window_hei
 {}
 
 Viewer::Viewer(const WindowOptions& window_options)
+    : m_initial_window_options(window_options)
 {
     if (!init_glfw(window_options)) return;
+
+    if (!init_imgui(window_options)) return;
 
     m_width = window_options.width;
     m_height = window_options.height;
@@ -24,6 +30,11 @@ Viewer::Viewer(const WindowOptions& window_options)
 
 Viewer::~Viewer()
 {
+    // Cleanup for ImGui
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }
@@ -34,6 +45,16 @@ void Viewer::begin_frame()
     glfwMakeContextCurrent(m_window);
     assert(m_window);
 
+    // Poll and handle events
+    glfwPollEvents();
+
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::ShowDemoWindow();
+
     // Clear default frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     Color bg_color = Color(0.22, 0.22, 0.22, 1);
@@ -43,11 +64,12 @@ void Viewer::begin_frame()
 
 void Viewer::end_frame()
 {
+    // Rendering
+    ImGui::Render(); // note: this renders to imgui's vertex buffers, not to screen
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); // render to screen buffer
+
     // Swap Front and Back buffers (double buffering)
     glfwSwapBuffers(m_window);
-
-    // Pool and process events
-    glfwPollEvents();
 }
 
 bool Viewer::should_close() const
@@ -135,6 +157,27 @@ bool Viewer::init_glfw(const WindowOptions& options)
     spdlog::info("Renderer: {}", glGetString(GL_RENDERER));
     spdlog::info("Version: {}", glGetString(GL_VERSION));
     spdlog::info("Shading language version: {}", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+    return true;
+}
+
+bool Viewer::init_imgui(const WindowOptions& options)
+{
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer backends
+    const char* glsl_version = "#version 330";
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
 
     return true;
 }

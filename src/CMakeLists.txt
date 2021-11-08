@@ -15,4 +15,4 @@ add_executable(MoShape
         ui/Camera.cpp ui/Camera.h
         ui/utils/unify_index_buffer.cpp ui/utils/unify_index_buffer.h ui/utils/compute_face_normal.h)
 
-target_link_libraries(MoShape PUBLIC Eigen3::Eigen spdlog matio gl3w glfw glm)
+target_link_libraries(MoShape PUBLIC Eigen3::Eigen spdlog matio gl3w glfw glm imgui)

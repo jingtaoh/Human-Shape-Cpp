@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <spdlog/spdlog.h>
+#include <imgui.h>
 
 #include "core/Model.h"
 #include "io/read_mat.h"
@@ -39,6 +40,11 @@ int main()
 
     while (!viewer.should_close()) {
         viewer.begin_frame();
+
+        ImGui::Begin("Test");
+        ImGui::Text("Hello Imgui");
+        ImGui::End();
+
         mr.update_camera(viewer.get_window());
         mr.update_light();
         mr.render_model(true, true);

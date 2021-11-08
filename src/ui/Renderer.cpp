@@ -25,6 +25,8 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     , m_camera(camera)
 {
     init_model();
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 }

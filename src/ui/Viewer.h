@@ -83,6 +83,7 @@ public:
 
 private:
     bool init_glfw(const WindowOptions& options);
+    bool init_imgui(const WindowOptions& options);
 
     WindowOptions m_initial_window_options;
     GLFWwindow* m_window;
