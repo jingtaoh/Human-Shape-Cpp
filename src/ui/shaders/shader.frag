@@ -6,7 +6,7 @@ in VS_OUT{
 } fs_in;
 
 struct Light {
-    vec3 pos;
+    vec3 dir;
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -32,8 +32,7 @@ void main()
 
     // diffuse
     vec3 n = normalize(fs_in.normal);
-    vec3 light_pos = (view * vec4(light.pos, 1)).xyz;
-    vec3 l = normalize(light_pos - fs_in.pos);
+    vec3 l = normalize((view * vec4(-light.dir,0)).xyz);
     float diff = max(dot(l, n), 0.0);
     vec3 diffuse = light.diffuse * (diff * material.diffuse);
 

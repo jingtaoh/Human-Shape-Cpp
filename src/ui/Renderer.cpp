@@ -144,7 +144,7 @@ void Renderer::render_ground() {}
 
 void Renderer::update_light()
 {
-    m_shader_program.set_uniform("light.pos", glm::vec3(0, 0, 100));
+    m_shader_program.set_uniform("light.dir", glm::vec3(0, 0, -1));
     m_shader_program.set_uniform("light.ambient", glm::vec3(0.1));
     m_shader_program.set_uniform("light.diffuse", glm::vec3(0.7));
     m_shader_program.set_uniform("light.specular", glm::vec3(0.1));
@@ -156,6 +156,7 @@ void Renderer::update_camera(GLFWwindow* window)
     m_camera.detect_window_dimension_change(window);
 
     auto model = glm::mat4(1.0f);
+//    model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0, 1, 0));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 
     auto view = m_camera.get_view();
