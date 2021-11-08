@@ -25,7 +25,8 @@ Camera Camera::default_camera(float width, float height)
 {
     Camera c;
     c.set_up(glm::vec3(0, 1, 0));
-    c.set_position(glm::vec3(0, 0, -180));
+//    c.set_position(glm::vec3(80, 80, 180));
+    c.set_position(glm::vec3(0, 0, 180));
     c.set_lookat(glm::vec3(0, 0, 0));
     c.set_window_dimensions(width, height);
     c.set_fov(glm::radians(60.0f));

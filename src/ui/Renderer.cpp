@@ -65,8 +65,6 @@ Renderer::Renderer(const Model& model, const Camera& camera)
 
     unify_index_buffer(new_vertices, new_normals, m_indices, m_vertices, m_normals);
 
-    for (int i = 0; i < m_vertices.size(); i++) m_colors.emplace_back(Color::green());
-
     // vao
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
@@ -76,18 +74,13 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
-        m_vertices.size() * (sizeof(Vector3f) + sizeof(Color) + sizeof(Vector3f)),
+        m_vertices.size() * (sizeof(Vector3f) + sizeof(Vector3f)),
         nullptr,
         GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertices.size() * sizeof(Vector3f), m_vertices.data());
     glBufferSubData(
         GL_ARRAY_BUFFER,
         m_vertices.size() * sizeof(Vector3f),
-        m_vertices.size() * sizeof(Color),
-        m_colors.data());
-    glBufferSubData(
-        GL_ARRAY_BUFFER,
-        m_vertices.size() * (sizeof(Vector3f) + sizeof(Color)),
         m_vertices.size() * sizeof(Vector3f),
         m_normals.data());
 
@@ -102,13 +95,21 @@ Renderer::Renderer(const Model& model, const Camera& camera)
 
     // Pass data to GPU
     m_shader_program.set_attribute("in_pos", 3, sizeof(Vector3f), 0);
-    m_shader_program
-        .set_attribute("in_color", 4, sizeof(Color), m_vertices.size() * sizeof(Vector3f));
     m_shader_program.set_attribute(
         "in_normal",
         3,
         sizeof(Vector3f),
-        m_vertices.size() * (sizeof(Vector3f) + sizeof(Color)));
+        m_vertices.size() * sizeof(Vector3f));
+
+    m_shader_program.use();
+    gl_check_error(__FILE__, __LINE__);
+
+    m_shader_program.set_uniform("material.ambient", glm::vec3(1));
+    m_shader_program.set_uniform("material.diffuse", glm::vec3(1));
+    m_shader_program.set_uniform("material.specular", glm::vec3(1));
+    m_shader_program.set_uniform("material.shininess", 32.0f);
+
+    gl_check_error(__FILE__, __LINE__);
 
     glEnable(GL_DEPTH_TEST);
 }
@@ -139,12 +140,22 @@ void Renderer::render_skeleton() const
     //    spdlog::info("render skeleton()");
 }
 
+void Renderer::render_ground() {}
+
+void Renderer::update_light()
+{
+    m_shader_program.set_uniform("light.pos", glm::vec3(0, 0, 100));
+    m_shader_program.set_uniform("light.ambient", glm::vec3(0.1));
+    m_shader_program.set_uniform("light.diffuse", glm::vec3(0.7));
+    m_shader_program.set_uniform("light.specular", glm::vec3(0.1));
+    gl_check_error(__FILE__, __LINE__);
+}
+
 void Renderer::update_camera(GLFWwindow* window)
 {
     m_camera.detect_window_dimension_change(window);
 
     auto model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
     model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 
     auto view = m_camera.get_view();
@@ -152,8 +163,7 @@ void Renderer::update_camera(GLFWwindow* window)
 
     auto normal_matrix = glm::transpose(glm::inverse(view * model));
 
-    m_shader_program.use();
-
+    gl_check_error(__FILE__, __LINE__);
     m_shader_program.set_uniform("model", model);
     m_shader_program.set_uniform("view", view);
     m_shader_program.set_uniform("normal_matrix", normal_matrix);

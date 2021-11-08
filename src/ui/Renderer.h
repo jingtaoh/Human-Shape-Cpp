@@ -19,12 +19,15 @@ public:
     void render_model(bool render_mesh, bool render_skeleton);
     void render_mesh() const;
     void render_skeleton() const;
+
+    // TODO: render ground
+    void render_ground();
+    void update_light();
     void update_camera(GLFWwindow* window);
 private:
     Model m_model;
 
     std::vector<Vector3f> m_vertices;
-    std::vector<Color> m_colors;
     std::vector<Vector3f> m_normals;
     std::vector<unsigned short> m_indices;
 

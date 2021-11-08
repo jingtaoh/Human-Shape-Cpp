@@ -45,6 +45,8 @@ public:
     // provide uniform location
     GLint uniform(const std::string& name);
 
+    void set_uniform(const std::string& name, float value);
+    void set_uniform(const std::string& name, const glm::vec3& v);
     void set_uniform(const std::string& name, const glm::mat4& m);
 
 private:

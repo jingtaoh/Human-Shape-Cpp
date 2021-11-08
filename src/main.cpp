@@ -40,6 +40,7 @@ int main()
     while (!viewer.should_close()) {
         viewer.begin_frame();
         mr.update_camera(viewer.get_window());
+        mr.update_light();
         mr.render_model(true, true);
         viewer.end_frame();
     }

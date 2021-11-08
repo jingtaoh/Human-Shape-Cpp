@@ -145,6 +145,16 @@ GLint ShaderProgram::uniform(const std::string& name)
         return it->second;
 }
 
+void ShaderProgram::set_uniform(const std::string& name, float value)
+{
+    glUniform1f(uniform(name), value);
+}
+
+void ShaderProgram::set_uniform(const std::string& name, const glm::vec3& v)
+{
+    glUniform3fv(uniform(name), 1, value_ptr(v));
+}
+
 void ShaderProgram::set_uniform(const std::string& name, const glm::mat4& m)
 {
     glUniformMatrix4fv(uniform(name), 1, GL_FALSE, value_ptr(m));

@@ -36,7 +36,7 @@ void Viewer::begin_frame()
 
     // Clear default frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    Color bg_color = Color::white();
+    Color bg_color = Color(0.22, 0.22, 0.22, 1);
     glClearColor(bg_color.r(), bg_color.g(), bg_color.b(), bg_color.a());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
