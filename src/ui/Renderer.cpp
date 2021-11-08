@@ -24,20 +24,27 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     , m_shader_program({m_vertex_shader, m_fragment_shader})
     , m_camera(camera)
 {
+    init_model();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+}
+
+void Renderer::init_model()
+{
     gl_check_error(__FILE__, __LINE__);
 
     // Creation of the mesh
     std::vector<Vector3f> old_vertices;
     std::vector<Vector3i> old_indices;
 
-    for (int i = 0; i < model.get_num_vertices(); i++) {
-        Vector3f vertex_pos = model.get_mesh().get_vertex_pos_by_id(i).cast<float>();
+    for (int i = 0; i < m_model.get_num_vertices(); i++) {
+        Vector3f vertex_pos = m_model.get_mesh().get_vertex_pos_by_id(i).cast<float>();
         old_vertices.emplace_back(vertex_pos);
     }
 
 
-    for (int i = 0; i < model.get_num_faces(); i++) {
-        Vector3i face_idx = model.get_mesh().get_face_indices_by_id(i);
+    for (int i = 0; i < m_model.get_num_faces(); i++) {
+        Vector3i face_idx = m_model.get_mesh().get_face_indices_by_id(i);
         old_indices.emplace_back(face_idx);
     }
 
@@ -110,8 +117,6 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     m_shader_program.set_uniform("material.shininess", 32.0f);
 
     gl_check_error(__FILE__, __LINE__);
-
-    glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::render_model(bool render_mesh, bool render_skeleton)

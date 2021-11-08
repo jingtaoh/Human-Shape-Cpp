@@ -16,6 +16,7 @@ class Renderer
 {
 public:
     Renderer(const Model& model, const Camera& camera);
+    void init_model();
     void render_model(bool render_mesh, bool render_skeleton);
     void render_mesh() const;
     void render_skeleton() const;
