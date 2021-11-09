@@ -23,14 +23,14 @@ bool get_similar_vertex_index(
 void unify_index_buffer(
     std::vector<Vector3f>& in_vertices,
     std::vector<Vector3f>& in_normals,
+    std::vector<Color>& in_colors,
     std::vector<unsigned short>& out_indices,
-    std::vector<Vector3f>& out_vertices,
-    std::vector<Vector3f>& out_normals)
+    std::vector<PackedVertex>& out_vertices)
 {
     std::map<PackedVertex, unsigned short> vertex_to_out_index;
 
     for (int i = 0; i < in_vertices.size(); i++) {
-        PackedVertex packed = {in_vertices[i], in_normals[i]};
+        PackedVertex packed = {in_vertices[i], in_normals[i], in_colors[i]};
 
         // Try to find a similar vertex
         unsigned short index;
@@ -39,8 +39,7 @@ void unify_index_buffer(
         if (found) {
             out_indices.push_back(index);
         } else {
-            out_vertices.push_back(in_vertices[i]);
-            out_normals.push_back(in_normals[i]);
+            out_vertices.push_back(packed);
             unsigned short new_index = (unsigned short)out_vertices.size() - 1;
             out_indices.push_back(new_index);
             vertex_to_out_index[packed] = new_index;

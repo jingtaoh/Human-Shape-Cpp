@@ -10,8 +10,9 @@ add_executable(MoShape
         ui/Viewer.cpp ui/Viewer.h
         ui/Color.h
         ui/Shader.cpp ui/Shader.h
-        ui/gl_check_error.h
+        ui/gl_check_error.cpp ui/gl_check_error.h
         ui/Renderer.cpp ui/Renderer.h
+        ui/Drawable.cpp ui/Drawable.h
         ui/Camera.cpp ui/Camera.h
         ui/utils/unify_index_buffer.cpp ui/utils/unify_index_buffer.h ui/utils/compute_face_normal.h)
 

@@ -7,40 +7,27 @@
 #define MOSHAPE_RENDERER_H
 
 #include "../core/Model.h"
-#include "Shader.h"
 #include "Camera.h"
-#include "Color.h"
+#include "Drawable.h"
 
 namespace MoShape {
 class Renderer
 {
 public:
     Renderer(const Model& model, const Camera& camera);
-    void init_model();
+    MeshData init_mesh(const Mesh& mesh);
+    MeshData init_skeleton(const Skeleton& skel);
     void render_model(bool render_mesh, bool render_skeleton);
     void render_mesh() const;
     void render_skeleton() const;
 
-    // TODO: render ground
-    void render_ground();
     void update_light();
     void update_camera(GLFWwindow* window);
+
 private:
     Model m_model;
-
-    std::vector<Vector3f> m_vertices;
-    std::vector<Vector3f> m_normals;
-    std::vector<unsigned short> m_indices;
-
-    // Shader
-    Shader m_vertex_shader;
-    Shader m_fragment_shader;
-    ShaderProgram m_shader_program;
-
     Camera m_camera;
-
-    // VAO/VBO/EBO
-    GLuint m_vao, m_vbo, m_ebo;
+    Drawable m_mesh;
 };
 } // namespace MoShape
 

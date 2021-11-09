@@ -9,20 +9,11 @@
 #include <Eigen/Dense>
 #include <map>
 #include <vector>
+#include "../Drawable.h"
 
 using namespace Eigen;
 
 namespace MoShape {
-
-struct PackedVertex
-{
-    Vector3f position;
-    Vector3f normal;
-    bool operator<(const PackedVertex that) const
-    {
-        return memcmp((void*)this, (void*)&that, sizeof(PackedVertex)) > 0;
-    };
-};
 
 bool get_similar_vertex_index(
     PackedVertex& packed,
@@ -32,9 +23,9 @@ bool get_similar_vertex_index(
 void unify_index_buffer(
     std::vector<Vector3f>& in_vertices,
     std::vector<Vector3f>& in_normals,
+    std::vector<Color>& in_colors,
     std::vector<unsigned short>& out_indices,
-    std::vector<Vector3f>& out_vertices,
-    std::vector<Vector3f>& out_normals);
+    std::vector<PackedVertex>& out_vertices);
 } // namespace MoShape
 
 #endif // MOSHAPE_UNIFY_INDEX_BUFFER_H
