@@ -19,7 +19,7 @@ public:
     MeshData init_skeleton(const Skeleton& skel, const Color& joint_color, const Color& bone_color);
 
     void render_model(bool render_mesh, bool render_skeleton);
-    void render_mesh() const;
+    void render_mesh(bool wireframe) const;
     void render_skeleton() const;
 
     void draw_triangle(Vector3f& v0, Vector3f& v1, Vector3f& v2, Color color, MeshData& mesh_data);

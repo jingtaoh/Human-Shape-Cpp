@@ -11,19 +11,17 @@ Drawable::Drawable(
     const MeshData& mesh_data,
     const Shader& vertex_shader,
     const Shader& fragment_shader,
-    const Primitive& p,
-    bool wireframe)
+    const Primitive& p)
     : m_mesh_data(mesh_data)
     , m_vertex_shader(vertex_shader)
     , m_fragment_shader(fragment_shader)
     , m_shader_program({m_vertex_shader, m_fragment_shader})
     , m_primitive(p)
-    , m_wireframe(wireframe)
 {
     init();
 }
 
-void Drawable::draw() const
+void Drawable::draw(bool wireframe) const
 {
     const auto gl_primitive = [](const Primitive& p) {
         switch (p) {
@@ -32,7 +30,7 @@ void Drawable::draw() const
         }
         return 0;
     };
-    if (m_wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     gl_check_error(__FILE__, __LINE__);
 
@@ -40,7 +38,7 @@ void Drawable::draw() const
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glDrawElements(gl_primitive(m_primitive), m_mesh_data.m_indices.size(), GL_UNSIGNED_INT, 0);
 
-    if (m_wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Drawable::init()

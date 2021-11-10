@@ -24,7 +24,7 @@ public:
     static Color yellow() { return Color(1, 1, 0); }
     static Color purple() { return Color(1, 0, 1); }
 
-    static Color orange() { return Color(218 / 256.0f, 130 / 256.0f, 50 / 256.0f); }
+    static Color orange() { return Color(0.78f, 0.53f, 0.32f, 1); }
 
     Color(const Eigen::Vector4f& color)
         : Eigen::Vector4f(color)

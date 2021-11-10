@@ -53,7 +53,7 @@ void Viewer::begin_frame()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::ShowDemoWindow();
+//    ImGui::ShowDemoWindow();
 
     // Clear default frame buffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

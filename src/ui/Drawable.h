@@ -54,16 +54,14 @@ public:
         const MeshData& mesh_data,
         const Shader& vertex_shader,
         const Shader& fragment_shader,
-        const Primitive& p,
-        bool wireframe = false);
-    void draw() const;
+        const Primitive& p);
+    void draw(bool wireframe) const;
     ShaderProgram get_shader_program() const;
 
 private:
     // VAO/VBO/EBO
     GLuint m_vao, m_vbo, m_ebo;
     Primitive m_primitive;
-    bool m_wireframe;
     void init();
 };
 } // namespace MoShape

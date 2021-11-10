@@ -11,6 +11,8 @@
 #include <GLFW/glfw3.h>
 #include "../core/Model.h"
 
+#define DATA_DIR "/Users/Lewis/Codes/MoShape/data"
+
 namespace MoShape {
 
 class Viewer
@@ -84,6 +86,7 @@ public:
 private:
     bool init_glfw(const WindowOptions& options);
     bool init_imgui(const WindowOptions& options);
+    inline void set_up_imgui_style();
 
     WindowOptions m_initial_window_options;
     GLFWwindow* m_window;

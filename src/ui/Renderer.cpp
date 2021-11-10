@@ -23,14 +23,12 @@ Renderer::Renderer(const Model& model, const Camera& camera)
           init_mesh(model.get_mesh(), Color::white()),
           Shader(SHADER_DIR "/default.vert", GL_VERTEX_SHADER),
           Shader(SHADER_DIR "/phong.frag", GL_FRAGMENT_SHADER),
-          Primitive::TRIANGLES,
-          true)
+          Primitive::TRIANGLES)
     , m_skeleton(
           init_skeleton(model.get_skeleton(), Color::white(), Color::white()),
           Shader(SHADER_DIR "/default.vert", GL_VERTEX_SHADER),
           Shader(SHADER_DIR "/phong.frag", GL_FRAGMENT_SHADER),
-          Primitive::TRIANGLES,
-          false)
+          Primitive::TRIANGLES)
 {
     glfwWindowHint(GLFW_SAMPLES, 4);
     glEnable(GL_MULTISAMPLE);
@@ -104,22 +102,24 @@ Renderer::init_skeleton(const Skeleton& skel, const Color& joint_color, const Co
 
 void Renderer::render_model(bool render_mesh, bool render_skeleton)
 {
-    //    spdlog::info("render model()");
-
-    if (render_mesh) Renderer::render_mesh();
-    if (render_skeleton) Renderer::render_skeleton();
+    if (render_mesh && render_skeleton) {
+        Renderer::render_mesh(true);
+        Renderer::render_skeleton();
+    } else if (render_mesh) {
+        Renderer::render_mesh(false);
+    } else if (render_skeleton) {
+        Renderer::render_skeleton();
+    }
 }
 
-void Renderer::render_mesh() const
+void Renderer::render_mesh(bool wireframe) const
 {
-    //    spdlog::info("render mesh()");
-    m_mesh.draw();
+    m_mesh.draw(wireframe);
 }
 
 void Renderer::render_skeleton() const
 {
-    //    spdlog::info("render skeleton()");
-    m_skeleton.draw();
+    m_skeleton.draw(false);
 }
 
 void Renderer::update_light()

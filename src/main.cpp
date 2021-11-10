@@ -38,16 +38,21 @@ int main()
     Camera camera = Camera::default_camera(window_width, window_height);
     Renderer mr(model, camera);
 
+    bool render_mesh = true;
+    bool render_skeleton = false;
+
     while (!viewer.should_close()) {
         viewer.begin_frame();
 
-        ImGui::Begin("Test");
-        ImGui::Text("Hello Imgui");
+        ImGui::Begin("Render Options");
+        ImGui::Checkbox("Render Mesh", &render_mesh);
+        ImGui::SameLine();
+        ImGui::Checkbox("Render Skeleton", &render_skeleton);
         ImGui::End();
 
         mr.update_camera(viewer.get_window());
         mr.update_light();
-        mr.render_model(true, true);
+        mr.render_model(render_mesh, render_skeleton);
         viewer.end_frame();
     }
     return 0;
