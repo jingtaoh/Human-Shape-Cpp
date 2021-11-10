@@ -164,12 +164,15 @@ void Model::change_pose(const Pose& pose_vector)
         Vector3d vertex_pos = m_mesh.get_mean_shape_vertex_pos_by_id(i);
 
         auto joint_indices = m_mesh.get_bound_joint_indices_by_id(i);
+        auto joint_weights = m_mesh.get_bound_joint_weights_by_id(i);
 
         Matrix4d accumulated_transform;
+        accumulated_transform.setZero();
 
         for (int j = 0; j < joint_indices.size(); j++) {
             int jid = joint_indices[j];
-            accumulated_transform += m_skinning_weights(i, jid) * global_transforms[jid];
+            double weight = joint_weights[j];
+            accumulated_transform += weight * global_transforms[jid];
         }
         Vector4d temp(vertex_pos(0), vertex_pos(1), vertex_pos(2), 1);
         temp = accumulated_transform * temp;
