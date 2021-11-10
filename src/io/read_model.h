@@ -46,6 +46,7 @@ Model read_model(fs::path path)
         std::vector<double> joint_weights(num_bound_joints);
         for (int j = 0; j < num_bound_joints; j++) {
             infile >> joint_indices[j] >> joint_weights[j];
+            joint_indices[j] -= 1;
         }
         vertices.emplace_back(pos * SKEL_SCALE_FACTOR, joint_indices, joint_weights);
     }
@@ -78,7 +79,17 @@ Model read_model(fs::path path)
         int parent;
         infile >> parent;
 
-        joints.emplace_back(joint_pos * SKEL_SCALE_FACTOR, joint_dir, parent - 1);
+        int fake_parent;
+        switch (dummy_id) {
+        case 3: fake_parent = 1; break;
+        case 7: fake_parent = 1; break;
+        case 11: fake_parent = 1; break;
+        case 15: fake_parent = 11; break;
+        case 20: fake_parent = 11; break;
+        default: fake_parent = parent;
+        }
+
+        joints.emplace_back(joint_pos * SKEL_SCALE_FACTOR, joint_dir, parent - 1, fake_parent - 1);
     }
 
     Skeleton skel(joints);

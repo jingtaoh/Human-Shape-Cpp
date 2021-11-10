@@ -23,11 +23,14 @@ void Mesh::change_shape(const Shape& shape_vector, const MatrixXd& eigenvectors)
 
         Vector3d offset = Vector3d::Zero();
         for (int j = 0; j < shape_vector.size(); j++) {
-            auto eigenvector = eigenvectors.row(j).segment(i * 3, 3);
+            Vector3d eigenvector = Vector3d(
+                eigenvectors(j, i),
+                eigenvectors(j, i + get_num_vertices()),
+                eigenvectors(j, i + get_num_vertices() * 2));
             offset += shape_vector[j] * SKEL_SCALE_FACTOR * eigenvector;
         }
 
-        auto new_vertex_pos = vertex_pos + offset;
+        Vector3d new_vertex_pos = vertex_pos + offset;
         m_vertices[i].set_position(new_vertex_pos);
     }
 
