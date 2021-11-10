@@ -10,24 +10,37 @@ namespace MoShape {
 Drawable::Drawable(
     const MeshData& mesh_data,
     const Shader& vertex_shader,
-    const Shader& fragment_shader)
+    const Shader& fragment_shader,
+    const Primitive& p,
+    bool wireframe)
     : m_mesh_data(mesh_data)
     , m_vertex_shader(vertex_shader)
     , m_fragment_shader(fragment_shader)
     , m_shader_program({m_vertex_shader, m_fragment_shader})
+    , m_primitive(p)
+    , m_wireframe(wireframe)
 {
     init();
 }
 
 void Drawable::draw() const
 {
+    const auto gl_primitive = [](const Primitive& p) {
+        switch (p) {
+        case Primitive::POINTS: return GL_POINTS;
+        case Primitive::TRIANGLES: return GL_TRIANGLES;
+        }
+        return 0;
+    };
+    if (m_wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     gl_check_error(__FILE__, __LINE__);
 
     glBindVertexArray(m_vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glDrawElements(gl_primitive(m_primitive), m_mesh_data.m_indices.size(), GL_UNSIGNED_INT, 0);
 
-    gl_check_error(__FILE__, __LINE__);
-    glDrawElements(GL_TRIANGLES, m_mesh_data.m_indices.size(), GL_UNSIGNED_SHORT, 0);
+    if (m_wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Drawable::init()
@@ -50,7 +63,7 @@ void Drawable::init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        m_mesh_data.m_indices.size() * sizeof(unsigned short),
+        m_mesh_data.m_indices.size() * sizeof(unsigned int),
         m_mesh_data.m_indices.data(),
         GL_STATIC_DRAW);
 

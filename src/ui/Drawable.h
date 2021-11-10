@@ -17,20 +17,27 @@ namespace MoShape {
 
 struct PackedVertex
 {
-    Vector3f position;
-    Vector3f normal = Vector3f(0, 0, 1);
-    Color color = Color(1, 1, 1, 1);
+    PackedVertex(Vector3f p, Vector3f n, Color c)
+        : position(p)
+        , normal(n)
+        , color(c)
+    {}
     bool operator<(const PackedVertex that) const
     {
         return memcmp((void*)this, (void*)&that, sizeof(PackedVertex)) > 0;
     };
+    Vector3f position;
+    Vector3f normal = Vector3f(0, 0, 1);
+    Color color = Color(1, 1, 1, 1);
 };
 
 struct MeshData
 {
     std::vector<PackedVertex> m_vertices;
-    std::vector<unsigned short> m_indices;
+    std::vector<unsigned int> m_indices;
 };
+
+enum class Primitive { POINTS, TRIANGLES };
 
 class Drawable
 {
@@ -43,13 +50,20 @@ public:
     Shader m_fragment_shader;
     ShaderProgram m_shader_program;
 
-    Drawable(const MeshData& mesh_data, const Shader& vertex_shader, const Shader& fragment_shader);
+    Drawable(
+        const MeshData& mesh_data,
+        const Shader& vertex_shader,
+        const Shader& fragment_shader,
+        const Primitive& p,
+        bool wireframe = false);
     void draw() const;
     ShaderProgram get_shader_program() const;
 
 private:
     // VAO/VBO/EBO
     GLuint m_vao, m_vbo, m_ebo;
+    Primitive m_primitive;
+    bool m_wireframe;
     void init();
 };
 } // namespace MoShape

@@ -17,14 +17,14 @@ namespace MoShape {
 
 bool get_similar_vertex_index(
     PackedVertex& packed,
-    std::map<PackedVertex, unsigned short>& vertex_to_index,
-    unsigned short& result);
+    std::map<PackedVertex, unsigned int>& vertex_to_index,
+    unsigned int& result);
 
 void unify_index_buffer(
     std::vector<Vector3f>& in_vertices,
     std::vector<Vector3f>& in_normals,
     std::vector<Color>& in_colors,
-    std::vector<unsigned short>& out_indices,
+    std::vector<unsigned int>& out_indices,
     std::vector<PackedVertex>& out_vertices);
 } // namespace MoShape
 
