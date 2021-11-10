@@ -47,10 +47,11 @@ Model::Model(const Mesh& mesh, const Skeleton& skel)
 
 void Model::center_model()
 {
-    for (int i = 0; i < get_num_vertices(); i++)
-    {
+    for (int i = 0; i < get_num_vertices(); i++) {
         m_mesh.set_vertex_pos_by_id(i, m_mesh.get_vertex_pos_by_id(i) - m_center);
-        m_mesh.set_mean_shape_vertex_pos_by_id(i, m_mesh.get_mean_shape_vertex_pos_by_id(i) - m_center);
+        m_mesh.set_mean_shape_vertex_pos_by_id(
+            i,
+            m_mesh.get_mean_shape_vertex_pos_by_id(i) - m_center);
     }
     m_center.setZero();
 }
@@ -82,20 +83,39 @@ void Model::update_skeleton()
     // new joint position is the average weighted sum of all the vertices
     for (int j = 0; j < num_joints; j++) {
         Vector3d weighted_sum;
-        weights.setZero();
-        int sum_of_weights = 0;
+        weighted_sum.setZero();
+        double sum_of_weights = 0;
         for (int i = 0; i < num_vertices; i++) {
-            weights(i, j) = (j == 0) ? m_skinning_weights(i, j)
-                                     : (std::min(
-                                           m_skinning_weights(i, j),
-                                           m_skinning_weights(i, m_skeleton.get_parent_by_id(j))));
+            weights(i, j) = (j == 0)
+                                ? m_skinning_weights(i, j)
+                                : (std::min(
+                                      m_skinning_weights(i, j),
+                                      m_skinning_weights(i, m_skeleton.get_fake_parent_by_id(j))));
             weighted_sum += weights(i, j) * m_mesh.get_mean_shape_vertex_pos_by_id(i);
             sum_of_weights += weights(i, j);
         }
         Vector3d new_joint_pos = weighted_sum / sum_of_weights;
         m_skeleton.set_joint_pos_by_id(j, new_joint_pos);
     }
+
+    // copy overlapping joints over
+    copy_joint_pos(2, 1); // 2 -> 1
+    copy_joint_pos(6, 5); // 6 -> 5
+    copy_joint_pos(10, 9); // 10 -> 9
+    copy_joint_pos(14, 12); // 14 -> 12
+    copy_joint_pos(14, 13); // 14 -> 13
+    copy_joint_pos(19, 17); // 19 -> 17
+    copy_joint_pos(19, 18); // 19 -> 18
+    copy_joint_pos(6, 22); // 6 -> 22
+    copy_joint_pos(2, 23); // 2 -> 23
+    copy_joint_pos(10, 24); // 10 -> 24
+
     m_skeleton.update_joints_mean_pose();
+}
+
+void Model::copy_joint_pos(int from, int to)
+{
+    m_skeleton.set_joint_pos_by_id(to, m_skeleton.get_joint_by_id(from).get_position());
 }
 
 void Model::change_pose(const Pose& pose_vector)

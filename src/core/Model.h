@@ -34,6 +34,7 @@ public:
 protected:
     void change_shape_to_mesh(const Shape& shape_vector, const MatrixXd& eigenvectors);
     void update_skeleton();
+    inline void copy_joint_pos(int from, int to);
     void change_pose(const Pose& pose_vector);
 
     Mesh m_mesh;

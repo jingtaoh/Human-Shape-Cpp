@@ -25,6 +25,7 @@ public:
     inline Joint get_root_joint() const { return get_joint_by_id(0); }
     inline int get_num_joints() const { return m_joint_list.size(); }
     inline int get_parent_by_id(int jid) const { return get_joint_by_id(jid).get_parent_id(); }
+    inline int get_fake_parent_by_id(int jid) const { return get_joint_by_id(jid).get_fake_parent_id(); }
 
     inline void set_joint_pos_by_id(int jid, const Vector3d& pos)
     {
