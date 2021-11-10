@@ -47,7 +47,7 @@ Model read_model(fs::path path)
         for (int j = 0; j < num_bound_joints; j++) {
             infile >> joint_indices[j] >> joint_weights[j];
         }
-        vertices.emplace_back(pos, joint_indices, joint_weights);
+        vertices.emplace_back(pos * SKEL_SCALE_FACTOR, joint_indices, joint_weights);
     }
 
     // Read faces
@@ -78,7 +78,7 @@ Model read_model(fs::path path)
         int parent;
         infile >> parent;
 
-        joints.emplace_back(joint_pos, joint_dir, parent - 1);
+        joints.emplace_back(joint_pos * SKEL_SCALE_FACTOR, joint_dir, parent - 1);
     }
 
     Skeleton skel(joints);

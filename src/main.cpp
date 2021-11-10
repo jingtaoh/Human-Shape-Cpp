@@ -1,21 +1,27 @@
 #include <iostream>
 
 #include <spdlog/spdlog.h>
+#include <imgui.h>
 
 #include "core/Model.h"
 #include "io/read_mat.h"
 #include "io/read_model.h"
+#include "ui/Renderer.h"
+#include "ui/Viewer.h"
+
+#define DATA_DIR "../data/"
 
 using namespace MoShape;
 
 int main()
 {
     // Read human shape model
-    auto model = read_model("../data/model.dat");
+    auto model = read_model(DATA_DIR "/model.dat");
+    model.center_model();
 
     // Read shape space eigenvectors
     Vector2i dims(20, 19347);
-    auto evectors = read_mat("../data/evectors.mat", dims);
+    auto evectors = read_mat(DATA_DIR "/evectors.mat", dims);
 
     // Construct shape vector and pose vector
     Shape shape(20, 1);
@@ -24,6 +30,30 @@ int main()
     // Change shape and pose
     model.change_shape_and_pose(shape, evectors, pose);
 
-    spdlog::info("Hello, World!");
+    float window_width = 1024;
+    float window_height = 768;
+
+    Viewer viewer("MoShape demo", window_width, window_height);
+    // Must initialize after the viewer
+    Camera camera = Camera::default_camera(window_width, window_height);
+    Renderer mr(model, camera);
+
+    bool render_mesh = true;
+    bool render_skeleton = false;
+
+    while (!viewer.should_close()) {
+        viewer.begin_frame();
+
+        ImGui::Begin("Render Options");
+        ImGui::Checkbox("Render Mesh", &render_mesh);
+        ImGui::SameLine();
+        ImGui::Checkbox("Render Skeleton", &render_skeleton);
+        ImGui::End();
+
+        mr.update_camera(viewer.get_window());
+        mr.update_light();
+        mr.render_model(render_mesh, render_skeleton);
+        viewer.end_frame();
+    }
     return 0;
 }

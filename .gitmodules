@@ -7,3 +7,15 @@
 [submodule "external/matio"]
 	path = external/matio
 	url = git://git.code.sf.net/p/matio/matio
+[submodule "external/gl3w"]
+	path = external/gl3w
+	url = https://github.com/adobe/lagrange-gl3w
+[submodule "external/glfw"]
+	path = external/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "external/glm"]
+	path = external/glm
+	url = https://github.com/g-truc/glm
+[submodule "external/imgui"]
+	path = external/imgui
+	url = git@github.com:ocornut/imgui.git

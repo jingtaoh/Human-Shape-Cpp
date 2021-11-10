@@ -11,6 +11,8 @@
 #include <Eigen/Dense>
 #include <vector>
 
+#define SKEL_SCALE_FACTOR 0.1
+
 using namespace Eigen;
 
 namespace MoShape {
@@ -38,9 +40,21 @@ public:
     {
         return m_vertices[vid].get_joint_weights();
     }
-    inline auto get_mean_shape_vertex_pos_by_id(int vid) const
+    inline Vector3d get_mean_shape_vertex_pos_by_id(int vid) const
     {
         return m_vertices_mean_shape[vid].get_position();
+    }
+    inline Vector3d get_vertex_pos_by_id(int vid) const
+    {
+        return m_vertices[vid].get_position();
+    }
+    inline Vector3i get_face_indices_by_id(int fid) const
+    {
+        return m_faces[fid];
+    }
+    inline void set_mean_shape_vertex_pos_by_id(int vid, const Vector3d& pos)
+    {
+        m_vertices_mean_shape[vid].set_position(pos);
     }
     inline void set_vertex_pos_by_id(int vid, const Vector3d& pos)
     {

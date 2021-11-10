@@ -11,10 +11,14 @@
 
 namespace MoShape {
 
+using AABB = Eigen::AlignedBox3d;
+
 class Model
 {
 public:
     Model(const Mesh& mesh, const Skeleton& skel);
+
+    void center_model();
 
     void change_shape_and_pose(
         const Shape& shape_vector,
@@ -22,7 +26,10 @@ public:
         const Pose& pose_vector);
 
     inline int get_num_vertices() const { return m_mesh.get_num_vertices(); }
+    inline int get_num_faces() const { return m_mesh.get_num_faces(); }
     inline int get_num_joints() const { return m_skeleton.get_num_joints(); }
+    inline const Mesh& get_mesh() const { return m_mesh; }
+    inline const Skeleton& get_skeleton() const { return m_skeleton; }
 
 protected:
     void change_shape_to_mesh(const Shape& shape_vector, const MatrixXd& eigenvectors);
@@ -33,6 +40,9 @@ protected:
     Shape m_shape_vector;
     Skeleton m_skeleton;
     Pose m_pose_vector;
+
+    AABB m_bound;
+    Vector3d m_center;
 
     MatrixXd m_skinning_weights;
 };

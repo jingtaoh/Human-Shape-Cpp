@@ -4,6 +4,8 @@
 //
 
 #include "Model.h"
+#include <spdlog/fmt/ostr.h>
+#include <spdlog/spdlog.h>
 #include <algorithm>
 #include "convert_axis_angle_and_translation_to_matrix.h"
 #include "convert_axis_angle_to_matrix.h"
@@ -28,6 +30,29 @@ Model::Model(const Mesh& mesh, const Skeleton& skel)
             m_skinning_weights(i, joint_indices[j]) += joint_weights[j];
         }
     }
+
+    // TODO: find out why center is not the same
+    // Construct AABB
+    m_center = Vector3d::Zero();
+    m_bound = AABB();
+    for (int i = 0; i < num_vertices; i++) {
+        m_bound.extend(m_mesh.get_mean_shape_vertex_pos_by_id(i));
+        m_center += m_mesh.get_mean_shape_vertex_pos_by_id(i);
+    }
+    m_center /= num_vertices;
+
+    spdlog::info("m_bound: \n\tcenter: {} \n\t size: {}", m_bound.center(), m_bound.diagonal());
+    spdlog::info("averaged center: {}", m_center);
+}
+
+void Model::center_model()
+{
+    for (int i = 0; i < get_num_vertices(); i++)
+    {
+        m_mesh.set_vertex_pos_by_id(i, m_mesh.get_vertex_pos_by_id(i) - m_center);
+        m_mesh.set_mean_shape_vertex_pos_by_id(i, m_mesh.get_mean_shape_vertex_pos_by_id(i) - m_center);
+    }
+    m_center.setZero();
 }
 
 void Model::change_shape_and_pose(
