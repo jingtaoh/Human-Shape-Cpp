@@ -16,7 +16,7 @@ using namespace Eigen;
 
 namespace MoShape {
 typedef std::vector<Vector4f> vector;
-Renderer::Renderer(const Model& model, const Camera& camera)
+Renderer::Renderer(Model& model, const Camera& camera)
     : m_model(model)
     , m_camera(camera)
     , m_mesh(
@@ -36,7 +36,7 @@ Renderer::Renderer(const Model& model, const Camera& camera)
     glEnable(GL_CULL_FACE);
 }
 
-MeshData Renderer::init_mesh(const Mesh& mesh, const Color& color)
+MeshData Renderer::init_mesh(Mesh& mesh, const Color& color)
 {
     // Creation of the mesh
     std::vector<Vector3f> old_vertices;
@@ -82,8 +82,7 @@ MeshData Renderer::init_mesh(const Mesh& mesh, const Color& color)
     return res;
 }
 
-MeshData
-Renderer::init_skeleton(const Skeleton& skel, const Color& joint_color, const Color& bone_color)
+MeshData Renderer::init_skeleton(Skeleton& skel, const Color& joint_color, const Color& bone_color)
 {
     MeshData res;
     for (int jid = 0; jid < skel.get_num_joints(); jid++) {
@@ -120,6 +119,13 @@ void Renderer::render_mesh(bool wireframe) const
 void Renderer::render_skeleton() const
 {
     m_skeleton.draw(false);
+}
+
+void Renderer::update_model()
+{
+    m_model.update_model();
+    m_mesh.re_init(init_mesh(m_model.get_mesh(), Color::white()));
+    m_skeleton.re_init(init_skeleton(m_model.get_skeleton(), Color::white(), Color::white()));
 }
 
 void Renderer::update_light()

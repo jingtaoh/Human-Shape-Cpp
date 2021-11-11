@@ -14,9 +14,9 @@ namespace MoShape {
 class Renderer
 {
 public:
-    Renderer(const Model& model, const Camera& camera);
-    MeshData init_mesh(const Mesh& mesh, const Color& color);
-    MeshData init_skeleton(const Skeleton& skel, const Color& joint_color, const Color& bone_color);
+    Renderer(Model& model, const Camera& camera);
+    MeshData init_mesh(Mesh& mesh, const Color& color);
+    MeshData init_skeleton(Skeleton& skel, const Color& joint_color, const Color& bone_color);
 
     void render_model(bool render_mesh, bool render_skeleton);
     void render_mesh(bool wireframe) const;
@@ -37,8 +37,11 @@ public:
         int stack_count,
         MeshData& mesh_data);
 
+    void update_model();
     void update_light();
     void update_camera(GLFWwindow* window);
+
+    inline Model& get_model() { return m_model; }
 
 private:
     Model m_model;
