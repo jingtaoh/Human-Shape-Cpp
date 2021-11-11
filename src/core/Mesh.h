@@ -24,7 +24,7 @@ class Mesh
 public:
     Mesh(std::vector<SkinnedVertex> vertices, std::vector<Vector3i> faces);
 
-    void change_shape(const Shape& shape_vector, const MatrixXd& eigenvectors);
+    void change_shape(Shape& shape_vector, MatrixXd& eigenvectors);
 
     inline int get_num_vertices() const { return m_vertices.size(); };
     inline int get_num_faces() const { return m_faces.size(); }

@@ -11,9 +11,10 @@
 #include "convert_axis_angle_to_matrix.h"
 
 namespace MoShape {
-Model::Model(const Mesh& mesh, const Skeleton& skel)
+Model::Model(Mesh& mesh, Skeleton& skel)
     : m_mesh(mesh)
     , m_skeleton(skel)
+    , m_is_dirty(false)
 {
     // Construct skinning weight matrix
     int num_vertices = get_num_vertices();
@@ -31,18 +32,15 @@ Model::Model(const Mesh& mesh, const Skeleton& skel)
         }
     }
 
-    // TODO: find out why center is not the same
-    // Construct AABB
+    // Compute center so that we can move it to origin
     m_center = Vector3d::Zero();
-    m_bound = AABB();
     for (int i = 0; i < num_vertices; i++) {
-        m_bound.extend(m_mesh.get_mean_shape_vertex_pos_by_id(i));
         m_center += m_mesh.get_mean_shape_vertex_pos_by_id(i);
     }
     m_center /= num_vertices;
 
-    spdlog::info("m_bound: \n\tcenter: {} \n\t size: {}", m_bound.center(), m_bound.diagonal());
-    spdlog::info("averaged center: {}", m_center);
+    m_shape_vector = Shape(20, 0.0f);
+    m_pose_vector = Pose(31, 0.0f);
 }
 
 void Model::center_model()
@@ -56,19 +54,22 @@ void Model::center_model()
     m_center.setZero();
 }
 
-void Model::change_shape_and_pose(
-    const Shape& shape_vector,
-    const MatrixXd& eigenvectors,
-    const Pose& pose_vector)
+void Model::update_model()
 {
-    change_shape_to_mesh(shape_vector, eigenvectors);
-    update_skeleton();
-    change_pose(pose_vector);
+    change_shape_and_pose(m_shape_vector, m_pose_vector);
 }
 
-void Model::change_shape_to_mesh(const Shape& shape_vector, const MatrixXd& eigenvectors)
+void Model::change_shape_and_pose(Shape& shape_vector, Pose& pose_vector)
 {
-    m_mesh.change_shape(shape_vector, eigenvectors);
+    change_shape_to_mesh(shape_vector);
+    update_skeleton();
+    change_pose(pose_vector);
+    m_is_dirty = false;
+}
+
+void Model::change_shape_to_mesh(Shape& shape_vector)
+{
+    m_mesh.change_shape(shape_vector, m_eigenvectors);
     m_shape_vector = shape_vector;
 }
 
@@ -91,7 +92,7 @@ void Model::update_skeleton()
                                 : (std::min(
                                       m_skinning_weights(i, j),
                                       m_skinning_weights(i, m_skeleton.get_fake_parent_by_id(j))));
-            weighted_sum += weights(i, j) * m_mesh.get_mean_shape_vertex_pos_by_id(i);
+            weighted_sum += weights(i, j) * m_mesh.get_vertex_pos_by_id(i);
             sum_of_weights += weights(i, j);
         }
         Vector3d new_joint_pos = weighted_sum / sum_of_weights;
@@ -118,7 +119,7 @@ void Model::copy_joint_pos(int from, int to)
     m_skeleton.set_joint_pos_by_id(to, m_skeleton.get_joint_by_id(from).get_position());
 }
 
-void Model::change_pose(const Pose& pose_vector)
+void Model::change_pose(Pose& pose_vector)
 {
     // pose: 1 x 31
     // [0..2] specify the global rotation
@@ -161,7 +162,7 @@ void Model::change_pose(const Pose& pose_vector)
 
     // Apply transforms to vertices
     for (int i = 0; i < get_num_vertices(); i++) {
-        Vector3d vertex_pos = m_mesh.get_mean_shape_vertex_pos_by_id(i);
+        Vector3d vertex_pos = m_mesh.get_vertex_pos_by_id(i);
 
         auto joint_indices = m_mesh.get_bound_joint_indices_by_id(i);
         auto joint_weights = m_mesh.get_bound_joint_weights_by_id(i);

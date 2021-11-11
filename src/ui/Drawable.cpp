@@ -8,7 +8,7 @@
 
 namespace MoShape {
 Drawable::Drawable(
-    const MeshData& mesh_data,
+    MeshData mesh_data,
     const Shader& vertex_shader,
     const Shader& fragment_shader,
     const Primitive& p)
@@ -18,7 +18,7 @@ Drawable::Drawable(
     , m_shader_program({m_vertex_shader, m_fragment_shader})
     , m_primitive(p)
 {
-    init();
+    init(true);
 }
 
 void Drawable::draw(bool wireframe) const
@@ -41,14 +41,20 @@ void Drawable::draw(bool wireframe) const
     if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void Drawable::init()
+void Drawable::re_init(MeshData mesh_data)
+{
+    m_mesh_data = mesh_data;
+    init(false);
+}
+
+void Drawable::init(bool first_time)
 {
     // vao
-    glGenVertexArrays(1, &m_vao);
+    if (first_time) glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
 
     // vbo
-    glGenBuffers(1, &m_vbo);
+    if (first_time) glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(
         GL_ARRAY_BUFFER,
@@ -57,7 +63,7 @@ void Drawable::init()
         GL_STATIC_DRAW);
 
     // ebo
-    glGenBuffers(1, &m_ebo);
+    if (first_time) glGenBuffers(1, &m_ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
