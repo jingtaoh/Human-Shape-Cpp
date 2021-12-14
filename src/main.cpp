@@ -113,7 +113,7 @@ int main()
             if (ImGui::CollapsingHeader("Pose Vector")) {
                 for (int i = 0; i < 3; i++) {
                     std::string label = "pose[" + std::to_string(i) + "] " + pose_labels[i];
-                    if (ImGui::InputDouble(label.c_str(), &pose_vectors[i], 1.0, 5.0, "%.f deg")) {
+                    if (ImGui::InputDouble(label.c_str(), &pose_vectors[i], 30, 30, "%.f deg")) {
                         mr.get_model().set_pose_vector_by_id(i, glm::radians(pose_vectors[i]));
                         mr.get_model().set_dirty(true);
                     }
@@ -127,7 +127,7 @@ int main()
                 }
                 for (int i = 7; i < pose_vectors.size(); i++) {
                     std::string label = "pose[" + std::to_string(i) + "] " + pose_labels[i];
-                    if (ImGui::InputDouble(label.c_str(), &pose_vectors[i], 1.0, 5.0, "%.f deg")) {
+                    if (ImGui::InputDouble(label.c_str(), &pose_vectors[i], 30, 30, "%.f deg")) {
                         mr.get_model().set_pose_vector_by_id(i, glm::radians(pose_vectors[i]));
                         mr.get_model().set_dirty(true);
                     }
