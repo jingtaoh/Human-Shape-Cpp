@@ -10,6 +10,11 @@
 #include "Camera.h"
 #include "Drawable.h"
 
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
+
 namespace MoShape {
 class Renderer
 {
@@ -40,6 +45,8 @@ public:
     void update_model();
     void update_light();
     void update_camera(GLFWwindow* window);
+
+    void save_mesh(fs::path path);
 
     inline Model& get_model() { return m_model; }
 
