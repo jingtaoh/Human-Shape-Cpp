@@ -1,6 +1,6 @@
 # Human Shape - C++
 
-This is the c++ implementation with OpenGL of displaying and manipulating statistical human body and shape model
+This is the c++ implementation with OpenGL of displaying and manipulating statistical human body shape and pose model
 described in the paper [Building Statistical Shape Spaces for 3D Human Modeling](https://arxiv.org/abs/1503.05860)
 by [Leonid Pishchulin](https://scholar.google.de/citations?user=lECZKZsAAAAJ&hl=en) et al. Users can control the shape
 and posture of a human body by adjusting the shape and pose vectors from GUI.
