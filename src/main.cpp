@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <imgui.h>
 #include <spdlog/spdlog.h>
 
@@ -14,15 +12,15 @@ using namespace MoShape;
 int main()
 {
     // Read human shape model
-    auto model = read_model(DATA_DIR "/model.dat");
+    auto model = read_model(DATA_DIR "/caesar/model.dat");
     model.center_model();
     model.update_skeleton();
 
     // Read shape space eigenvalues and eigenvectors
     Vector2i dims(1, 20);
-    auto eigenvalues = read_mat(DATA_DIR "/evalues.mat", dims);
+    auto eigenvalues = read_mat(DATA_DIR "/caesar/evalues.mat", dims);
     dims = Vector2i(20, 19347);
-    auto eigenvectors = read_mat(DATA_DIR "/evectors.mat", dims);
+    auto eigenvectors = read_mat(DATA_DIR "/caesar/evectors.mat", dims);
     model.set_eigenvalues_and_eigenvectors(eigenvalues, eigenvectors);
 
     // Construct shape vector and pose vector

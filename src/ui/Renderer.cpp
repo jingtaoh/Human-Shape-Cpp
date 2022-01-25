@@ -10,7 +10,7 @@
 #include "gl_check_error.h"
 #include "utils/compute_face_normal.h"
 #include "utils/unify_index_buffer.h"
-#define SHADER_DIR "../../src/ui/shaders"
+#define SHADER_DIR "src/ui/shaders"
 
 using namespace Eigen;
 

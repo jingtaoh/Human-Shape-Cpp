@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 #include "../core/Model.h"
 
-#define DATA_DIR "/Users/Lewis/Codes/MoShape/data"
+#define DATA_DIR "data"
 
 namespace MoShape {
 
