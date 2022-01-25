@@ -134,6 +134,12 @@ int main()
                 }
             }
 
+            if (ImGui::Button("Save Mesh"))
+            {
+                spdlog::info("save mesh");
+                mr.save_mesh(DATA_DIR "/model.obj");
+            }
+
             ImGui::End();
         }
 

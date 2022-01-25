@@ -316,4 +316,29 @@ void Renderer::draw_joint(
         }
     }
 }
+
+void Renderer::save_mesh(fs::path path)
+{
+    std::ofstream outfile(path, std::ios::out);
+
+    assert(outfile && "Cannot open file for writing");
+
+    int num_vertices = m_mesh.m_mesh_data.m_vertices.size();
+    int num_faces = m_mesh.m_mesh_data.m_indices.size() / 3;
+
+    // Write vertices
+    for (int i = 0; i < num_vertices; i++) {
+        Vector3f pos = m_mesh.m_mesh_data.m_vertices[i].position;
+        outfile << "v " << pos.x() << " " << pos.y() << " " << pos.z() << std::endl;
+    }
+
+    // Write faces
+    for (int i = 0; i < num_faces; i++) {
+        outfile << "f ";
+        for (int j = 0; j < 3; j++) {
+            outfile << m_mesh.m_mesh_data.m_indices[i * 3 + j] + 1 << " ";
+        }
+        outfile << std::endl;
+    }
+}
 } // namespace MoShape
