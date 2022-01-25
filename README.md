@@ -1,7 +1,7 @@
 # Human Shape - C++
 
-This is the c++ implementation with OpenGL of displaying and manipulating statical human body and shape model described
-in the paper [Building Statistical Shape Spaces for 3D Human Modeling](https://arxiv.org/abs/1503.05860)
+This is the c++ implementation with OpenGL of displaying and manipulating statistical human body and shape model
+described in the paper [Building Statistical Shape Spaces for 3D Human Modeling](https://arxiv.org/abs/1503.05860)
 by [Leonid Pishchulin](https://scholar.google.de/citations?user=lECZKZsAAAAJ&hl=en) et al. Users can control the shape
 and posture of a human body by adjusting the shape and pose vectors from GUI.
 
@@ -24,7 +24,7 @@ and posture of a human body by adjusting the shape and pose vectors from GUI.
 
 Download the models from [MPII human shape](http://humanshape.mpi-inf.mpg.de/) website.
 
-```
+```bash
     cd data
     wget http://datasets.d2.mpi-inf.mpg.de/humanshape/caesar.zip
     unzip caesar.zip && rm -f caesar.zip
